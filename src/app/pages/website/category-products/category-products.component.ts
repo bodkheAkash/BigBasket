@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ProductService } from '../../../services/product.service';
 
 @Component({
   selector: 'app-category-products',
@@ -7,4 +9,23 @@ import { Component } from '@angular/core';
 })
 export class CategoryProductsComponent {
 
+  activeCategoryId:number=0;
+  products:any[]=[];
+  constructor(private activateRoute:ActivatedRoute,private prodServ:ProductService){
+
+    this.activateRoute.params.subscribe((res:any)=>{
+            
+              this.activeCategoryId = res.id;
+              this.LoadProduct();
+    })
+  }
+
+
+   
+  LoadProduct(){
+    this.prodServ.getAllProductsByCategoryId(this.activeCategoryId).subscribe((res:any)=>{
+     this.products=res.data;
+    })
+  }
+ 
 }
